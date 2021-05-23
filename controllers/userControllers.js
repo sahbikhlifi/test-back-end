@@ -15,7 +15,8 @@ exports.signupController = (req, res, next) => {
     } else {
         const user = new User({ firstName, lastName, email, password });
         user.save().then((savedUser) => {
-            res.status(201).send({ success: true, savedUser })
+            const refreshToken = getRefreshToken({ _id: savedUser._id })
+            res.status(201).send({ success: true, savedUser, refreshToken })
         }).catch(e => {
             return res.status(400).send({ success: false, message: e })
         })
