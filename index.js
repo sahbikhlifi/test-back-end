@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
-require("passport")
+const passport = require("passport");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
@@ -12,6 +12,7 @@ require("./strategies/JwtStrategy")
 require("./authenticate")
 
 const userRouter = require("./routes/userRoutes")
+const productRouter = require("./routes/productRoutes")
 
 const app = express()
 
@@ -37,6 +38,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.use("/users", userRouter)
+app.use("/products", passport.authenticate('bearer', { session: false }), productRouter)
 
 //Start the server in port 5000
 const server = app.listen(process.env.PORT || 8081, function () {
